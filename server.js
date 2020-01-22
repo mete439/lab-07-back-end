@@ -15,14 +15,15 @@ app.use(cors());
 // Routes
 app.get('/', (request, response) => {
   response.send('Home Page');
-})
+});
 
+// list Rout
 /// Route checker or error .
 app.get('/hello', (request, response) => {
   response.status(200).send('hello');
 });
 
-// list Routes 
+// list Routes
 
 app.get('/location ', locationHandler);
 // app.get('/weather', weatherHandler);
@@ -62,8 +63,7 @@ function Location(city, geoData) {
 
 }
 
-//// Creating error habndler function.. 
-
+//// Creating error habndler function.
 function errorHandler(error, request, response) {
   console.error(error);
   response.status(500).send(error);
