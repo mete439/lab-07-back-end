@@ -17,6 +17,11 @@ app.get('/', (request, response) => {
   response.send('Home Page');
 })
 
+/// Route checker or error 
+app.get('/hello', (request, response) => {
+  response.status(200).send('hello');
+});
+
 // list Routes 
 
 app.get('/location ', locationHandler);
