@@ -68,7 +68,7 @@ function Location(city, geoData) {
 //  weather constructor
 function Weather(day){
 
-  this.forcaste = day.summary;
+  this.forecast = day.summary;
   this.time = new Date(day.time * 1000).toString().slice(0, 15);
 }
 
@@ -76,13 +76,16 @@ function Weather(day){
 function weatherHandler(request, response){
 
   let latitude = request.query.latitude;
-  let longitude = require.query.location;
+  console.log(latitude);
+  let longitude = request.query.longitude;
+  console.log(longitude);
 
   const url = `https://api.darksky.net/forecast/${process.env.WRATHER_API_KEY}/${latitude},${longitude}`;
+  //console.log('prof of life');
 
   superagent.get(url)
-
     .then(data =>{
+      console.log(data);
       const weatherSummeries = data.body.daily.data.map(day => {
         return new Weather(day);
       });
