@@ -26,7 +26,7 @@ app.get('/hello', (request, response) => {
 // list Routes
 
 app.get('/location', locationHandler);
-// app.get('/weather', weatherHandler);
+app.get('/weather', weatherHandler);
 // app.get('/event', eventHandler);
 
 /// creating callback functions for routes.
@@ -65,15 +65,42 @@ function Location(city, geoData) {
   this.longitude = geoData.lon;
 
 }
+//  weather constructor
+function Weather(day){
+
+  this.forcaste = day.summary;
+  this.time = new Date(day.time * 1000).toString().slice(0, 15);
+}
 
 //// Creating error habndler function.
+function weatherHandler(request, response){
+
+  let latitude = request.query.latitude;
+  let longitude = require.query.location;
+
+  const url = `https://api.darksky.net/forecast/${process.env.WRATHER_API_KEY}/${latitude},${longitude}`;
+
+  superagent.get(url)
+
+    .then(data =>{
+      const weatherSummeries = data.body.daily.data.map(day => {
+        return new Weather(day);
+      });
+      response.status(200).json(weatherSummeries);
+    })
+    .catch(() => {
+      errorHandler('opps, something wrong', require, response);
+    });
+
+}
+
 function errorHandler(error, request, response) {
   console.error(error);
   response.status(500).send(error);
 }
 
 
-//// TO conferm the server is listning. 
+//// TO conferm the server is listning.
 app.listen(PORT, () => console.log(`Server up on port ${PORT}`));
 
 
