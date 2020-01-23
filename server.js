@@ -25,17 +25,20 @@ app.get('/hello', (request, response) => {
 
 // list Routes
 
-app.get('/location ', locationHandler);
+app.get('/location', locationHandler);
 // app.get('/weather', weatherHandler);
 // app.get('/event', eventHandler);
 
-/// creating callback functions for routes. 
+/// creating callback functions for routes.
 
 function locationHandler(request, response) {
+
   try {
+    //console.log(request);
     let city = request.query.city;
     let key = process.env.GEOCODE_API_KEY;
     const url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&format=json`;
+    // console.log(url);
 
     superagent.get(url)
       .then(data => {
@@ -53,7 +56,7 @@ function locationHandler(request, response) {
 
 }
 
-////// creating constracter function for location 
+////// creating constracter function for location.
 
 function Location(city, geoData) {
   this.search_query = city;
