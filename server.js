@@ -27,7 +27,7 @@ app.get('/hello', (request, response) => {
 
 app.get('/location', locationHandler);
 app.get('/weather', weatherHandler);
-app.get('/event', eventHandler);
+app.get('/events', eventHandler);
 
 /// creating callback functions for routes.
 
@@ -72,33 +72,45 @@ function Weather(day) {
   this.time = new Date(day.time * 1000).toString().slice(0, 15);
 }
 // Eventful constructor.
+
+
 function Event(event) {
-  this.link = event.link_count;
-  this.name = event.city_name;
-  // this.event_date = new Date(event.time * 1000).toString().slice(0, 15);
-  this.summary = event.summary;
+  this.link = event.url;
+  this.name = event.title;
+  this.event_date = event.start_time;
+  this.summary = event.description;
 }
 // Eventful handler function.
 
 function eventHandler(request, response) {
 
-  let eventName = request.query.city_name;
-  let eventDay = request.query.event_date;
+  // let eventName = request.query.city_name;
+  // let eventDay = request.query.event_date;
+  let city = request.query.search_query;
 
 
-  const url = `http://api.eventful.com/rest/events/search?app_key=${EVENTFUL_API_KEY}&where=${eventName}&within=25`;
+
+  // const url = `http://api.eventful.com/json/events/search?app_key=PcxKj6NkPZVLnXtC&where=32.746682,-117.162741&within=25`
+
+
+  const url = `http://api.eventful.com/json/events/search?app_key=${process.env.EVENTFUL_API_KEY}&location=${city}&date=Future`;
 
 
   superagent.get(url)
     .then(data => {
-      console.log(data);
-      const eventsummary = data.body.event_day.data.map(day => {
-        return new Event(day);
+      // console.log(data.text);
+
+      let responseJson = JSON.parse(data.text);
+
+      const events = responseJson.events.event.map(data => {
+
+        return new Event(data);
       });
-      response.status(200).json(eventsummary);
+      // console.log(eventsummary);
+      response.send(events);
     })
     .catch(() => {
-      errorHandler('opps, something wrong', require, response);
+      errorHandler('opps, something wrong', request, response);
     });
 
 }
@@ -124,7 +136,7 @@ function weatherHandler(request, response) {
       response.status(200).json(weatherSummeries);
     })
     .catch(() => {
-      errorHandler('opps, something wrong', require, response);
+      errorHandler('opps, something wrong', request, response);
     });
 
 }
