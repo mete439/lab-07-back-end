@@ -71,21 +71,21 @@ function Weather(day) {
   this.forecast = day.summary;
   this.time = new Date(day.time * 1000).toString().slice(0, 15);
 }
-// Eventful constructor . 
+// Eventful constructor.
 function Event(event) {
   this.link = event.link_count;
   this.name = event.city_name;
   // this.event_date = new Date(event.time * 1000).toString().slice(0, 15);
   this.summary = event.summary;
 }
-// Eventful handler function . 
+// Eventful handler function.
 
 function eventHandler(request, response) {
 
   let eventName = request.query.city_name;
   let eventDay = request.query.event_date;
 
-  const url = `http://api.eventful.com/json/events/search?&keywords=${process.env.EVENTFUL_API_KEY}&location=${eventName}&${eventDay}=Future`;
+  const url = `http://api.eventful.com/json/events/search?&keywords=books/${process.env.EVENTFUL_API_KEY}&location=${eventName}&${eventDay}=Future`;
 
 
 
@@ -108,9 +108,9 @@ function eventHandler(request, response) {
 function weatherHandler(request, response) {
 
   let latitude = request.query.latitude;
-  console.log(latitude);
+  //console.log(latitude);
   let longitude = request.query.longitude;
-  console.log(longitude);
+  //console.log(longitude);
 
   const url = `https://api.darksky.net/forecast/${process.env.WRATHER_API_KEY}/${latitude},${longitude}`;
   //console.log('prof of life');
