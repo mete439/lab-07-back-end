@@ -85,7 +85,7 @@ function eventHandler(request, response) {
   let eventName = request.query.city_name;
   let eventDay = request.query.event_date;
 
-  const url = `http://api.eventful.com/json/events/search?&keywords=${process.env.EVENTFUL_API_KEY}&location=${eventName}&${eventDay}=Future`;
+  const url = `http://api.eventful.com/json/events/search?&keywords=books/${process.env.EVENTFUL_API_KEY}&location=${eventName}&${eventDay}=Future`;
 
 
 
