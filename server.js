@@ -27,7 +27,7 @@ app.get('/hello', (request, response) => {
 
 app.get('/location', locationHandler);
 app.get('/weather', weatherHandler);
-// app.get('/event', eventHandler);
+app.get('/event', eventHandler);
 
 /// creating callback functions for routes.
 
@@ -66,14 +66,46 @@ function Location(city, geoData) {
 
 }
 //  weather constructor
-function Weather(day){
+function Weather(day) {
 
   this.forecast = day.summary;
   this.time = new Date(day.time * 1000).toString().slice(0, 15);
 }
+// Eventful constructor . 
+function Event(event) {
+  this.link = event.url;
+  this.name = event.name;
+  this.event_date = new Date(event.time * 1000).toString().slice(0, 15);
+  this.summary = event.summary;
+}
+// Eventful handler function . 
+
+function Eventful(request, response) {
+
+  let eventName = request.query.name;
+  let eventDay = request.query.name;
+
+  const url = `http://api.eventful.com/rest/events/search?&keywords=${process.env.EVENTFUL_API_KEY}&location=${eventName}&${eventDay}=Future`;
+
+
+
+  superagent.get(url)
+    .then(data => {
+      console.log(data);
+      const eventsummary = data.body.event_day.data.map(day => {
+        return new Event(day);
+      });
+      response.status(200).json(eventsummary);
+    })
+    .catch(() => {
+      errorHandler('opps, something wrong', require, response);
+    });
+
+}
+
 
 //// Creating error habndler function.
-function weatherHandler(request, response){
+function weatherHandler(request, response) {
 
   let latitude = request.query.latitude;
   console.log(latitude);
@@ -84,7 +116,7 @@ function weatherHandler(request, response){
   //console.log('prof of life');
 
   superagent.get(url)
-    .then(data =>{
+    .then(data => {
       console.log(data);
       const weatherSummeries = data.body.daily.data.map(day => {
         return new Weather(day);
