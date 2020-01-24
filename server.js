@@ -73,9 +73,9 @@ function Weather(day) {
 }
 // Eventful constructor . 
 function Event(event) {
-  this.link = event.url;
-  this.name = event.name;
-  this.event_date = new Date(event.time * 1000).toString().slice(0, 15);
+  this.link = event.link_count;
+  this.name = event.city_name;
+  // this.event_date = new Date(event.time * 1000).toString().slice(0, 15);
   this.summary = event.summary;
 }
 // Eventful handler function . 
@@ -85,7 +85,7 @@ function eventHandler(request, response) {
   let eventName = request.query.name;
   let eventDay = request.query.event_date;
 
-  const url = `http://api.eventful.com/rest/events/search?&keywords=${process.env.EVENTFUL_API_KEY}&location=${eventName}&${eventDay}=Future`;
+  const url = `http://api.eventful.com/json/events/search?&keywords=${process.env.EVENTFUL_API_KEY}&location=${eventName}&${eventDay}=Future`;
 
 
 
