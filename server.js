@@ -80,7 +80,7 @@ function Event(event) {
 }
 // Eventful handler function . 
 
-function Eventful(request, response) {
+function eventHandler(request, response) {
 
   let eventName = request.query.name;
   let eventDay = request.query.name;
